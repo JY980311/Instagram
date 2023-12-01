@@ -1,10 +1,15 @@
 package com.example.instagram.presentation.view
 
+import android.util.Log
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,8 +40,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +51,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap.Companion.Round
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +60,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import com.example.Instagram.components.Doubletap
 import com.example.Instagram.components.ImageIndicator
 import com.example.instagram.ui.theme.InstagramGradient
 import com.example.instagram.R
@@ -146,7 +155,10 @@ fun Instagram(
                             modifier = Modifier
                                 .size(80.dp)
                                 .padding(8.dp)
-                                .background(brush = InstagramGradient, shape = RoundedCornerShape(50))
+                                .background(
+                                    brush = InstagramGradient,
+                                    shape = RoundedCornerShape(50)
+                                )
                                 .padding(3.dp)
                                 .border(
                                     width = 1.dp,
@@ -156,7 +168,7 @@ fun Instagram(
                                 .background(Color.White, shape = RoundedCornerShape(50))
                                 .padding(2.dp)
                                 .clip(shape = RoundedCornerShape(50))
-                                .clickable {  }
+                                .clickable { }
                         ) {
                             if (index == 0) {
 
@@ -231,17 +243,15 @@ fun Instagram(
                         )
                     }
                 }
-                /*val pagerState = rememberPagerState(0, 0f)*/
+                /*val pagerState = remembverPagerState(0, 0f)*/
 
                 HorizontalPager(state = pagerState) { page ->
-                    Image(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .size(500.dp)
-                            .border(width = 1.dp, color = Color.Black),
-                        painter = rememberImagePainter(data = mainImages[page]),
-                        contentDescription = "이미지 넣는 곳",
-                    )
+                    Doubletap(
+                        imageResource = mainImages[page],
+                        iconResource = R.drawable.baseline_favorite_red_25
+                    ) {
+                        Log.d("pick","liked")
+                    }
                 }
 
                 Row(
